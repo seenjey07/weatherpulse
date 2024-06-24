@@ -74,7 +74,7 @@ const CurrentWeather = () => {
 
       <h3>Current Weather</h3>
 
-      <Loading />
+      {!weatherData && <Loading />}
 
       {weatherData && (
         <div>
