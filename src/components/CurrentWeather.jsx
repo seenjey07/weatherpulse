@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar";
+import Loading from "./Loading";
 
 const CurrentWeather = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -72,6 +73,9 @@ const CurrentWeather = () => {
       <SearchBar onSearch={handleSearch} />
 
       <h3>Current Weather</h3>
+
+      <Loading />
+
       {weatherData && (
         <div>
           <h3>
