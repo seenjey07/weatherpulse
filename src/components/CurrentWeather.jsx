@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar";
 import Loading from "./Loading";
+import { Card, CardContent, CardTitle } from "./ui/card";
+
+import clearIcon from "./assets/icons/clear.png";
+import cloudIcon from "./assets/icons/cloud.png";
+import drizzleIcon from "./assets/icons/drizzle.png";
+import rainIcon from "./assets/icons/rain.png";
+import snowIcon from "./assets/icons/snow.png";
+import windIcon from "./assets/icons/wind.png";
+import humidityIcon from "./assets/icons/humidity.png";
 
 const CurrentWeather = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -69,28 +78,65 @@ const CurrentWeather = () => {
   };
 
   return (
-    <div>
+    <>
       <SearchBar onSearch={handleSearch} />
 
-      <h3>Current Weather</h3>
+      <Card className="m-auto p-2 font-mono bg-amber-300">
+        {!weatherData && <Loading />}
 
-      {!weatherData && <Loading />}
+        {weatherData && (
+          <CardContent className="text-center py-3 gap-2">
+            <CardTitle className="text-3xl text-amber-800">
+              {weatherData.main?.temp}°C
+            </CardTitle>
+            {weatherData.weather?.[0]?.main.includes("clear") ? (
+              <img
+                src={clearIcon}
+                alt="clearWeatherIcon"
+                className="weatherIcon"
+              />
+            ) : weatherData.weather?.[0]?.main.includes("cloud") ? (
+              <img src={cloudIcon} alt="cloudyWeatherIcon" />
+            ) : weatherData.weather?.[0]?.main.includes("drizzle") ? (
+              <img src={drizzleIcon} alt="drizzleWeatherIcon" />
+            ) : weatherData.weather?.[0]?.main.includes("rain") ? (
+              <img src={rainIcon} alt="rainWeatherIcon" />
+            ) : weatherData.weather?.[0]?.main.includes("snow") ? (
+              <img src={snowIcon} alt="snowWeatherIcon" />
+            ) : weatherData.weather?.[0]?.main.includes("wind") ? (
+              <img src={windIcon} alt="windWeatherIcon" />
+            ) : (
+              <p>Condition: {weatherData.weather?.[0]?.main}</p>
+            )}
+            <CardTitle className="pt-2">
+              {weatherData.name}, {weatherData.sys?.country}
+            </CardTitle>
+            <p className="pt-3">{formatDateTime(weatherData.dt)}</p>
+          </CardContent>
+        )}
+      </Card>
 
-      {weatherData && (
-        <div>
-          <h3>
-            {weatherData.name}, {weatherData.sys?.country}
-          </h3>
-          <p>{formatDateTime(weatherData.dt)}</p>
-          <p>Temperature: {weatherData.main?.temp}°C</p>
-          <p>Wind Speed: {weatherData.wind?.speed} m/s</p>
-          <p>Humidity: {weatherData.main?.humidity}%</p>
-          <p>Condition: {weatherData.weather?.[0]?.main}</p>
-          <p>Sunrise: {formatDateTime(weatherData.sys?.sunrise)}</p>
-          <p>Sunset: {formatDateTime(weatherData.sys?.sunset)}</p>
-        </div>
-      )}
-    </div>
+      <Card className="m-auto p-2 font-mono bg-white">
+        <CardTitle className="text-xl text-amber-800">
+          Weather Details
+        </CardTitle>
+
+        {weatherData && (
+          <div className="m-auto p-2 font-mono">
+            <img src={windIcon} alt="windIcon" className="weatherIcon" />
+            <p>{weatherData.wind?.speed} m/s</p>
+            <img
+              src={humidityIcon}
+              alt="humidityIcon"
+              className="weatherIcon"
+            />
+            <p>{weatherData.main?.humidity}%</p>
+            <p>Sunrise: {formatDateTime(weatherData.sys?.sunrise)}</p>
+            <p>Sunset: {formatDateTime(weatherData.sys?.sunset)}</p>
+          </div>
+        )}
+      </Card>
+    </>
   );
 };
 
