@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 const SearchBar = ({ onSearch }) => {
   const [city, setCity] = useState("");
@@ -26,9 +28,12 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="searchBar">
-      <form onSubmit={handleSearch}>
-        <input
+    <>
+      <form
+        onSubmit={handleSearch}
+        className="flex items-center m-auto w-1/2 max-w-md"
+      >
+        <Input
           type="text"
           value={city}
           onChange={handleChange}
@@ -36,6 +41,10 @@ const SearchBar = ({ onSearch }) => {
           autoComplete="on"
           required
         />
+        <Button type="submit" className="ml-2">
+          Search
+        </Button>
+
         {filteredLocations.length > 0 && (
           <ul>
             {filteredLocations.map((location) => (
@@ -43,9 +52,8 @@ const SearchBar = ({ onSearch }) => {
             ))}
           </ul>
         )}
-        <button type="submit">Search</button>
       </form>
-    </div>
+    </>
   );
 };
 
