@@ -84,7 +84,7 @@ const CurrentWeather = () => {
     <>
       <SearchBar onSearch={handleSearch} />
 
-      <Card className="m-auto mt-4 p-2 font-mono bg-amber-300 flex-1 place-content-center">
+      <Card className="m-auto mt-4 p-2 font-mono bg-amber-300 place-content-center flex-1">
         {!weatherData && <Loading />}
 
         {weatherData && (
@@ -171,9 +171,9 @@ const CurrentWeather = () => {
         )}
       </Card>
 
-      <div className="m-5">
-        <Card className="m-auto mt-3 font-mono bg-amber-300 w-fit place-content-center">
-          <CardTitle className="text-lg text-amber-800 pl-2 pt-1">
+      <div className="m-5 flex-1">
+        <Card className="m-auto mt-3 font-mono bg-amber-300 py-2">
+          <CardTitle className="text-lg text-amber-800 pl-2 pt-3">
             Weather Details
           </CardTitle>
 
