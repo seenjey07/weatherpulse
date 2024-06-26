@@ -29,10 +29,7 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <>
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center m-auto w-1/2 max-w-md"
-      >
+      <form onSubmit={handleSearch} className="flex flex-row m-auto min-w-1/2">
         <Input
           type="text"
           value={city}
