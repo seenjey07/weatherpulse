@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 
 const Header = ({ onSearch }) => {
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8 flex items-center justify-between">
+    <div className="px-4 md:px-8 flex items-center justify-between">
       <div className="flex items-center">
         <img
           src={logo}
