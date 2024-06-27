@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import SearchBar from "./SearchBar";
 import Loading from "./Loading";
 import { Card, CardContent, CardTitle } from "./ui/card";
 
@@ -10,8 +9,9 @@ import rainIcon from "./assets/icons/rain.mp4";
 import snowIcon from "./assets/icons/snow.mp4";
 import windyIcon from "./assets/icons/windy.mp4";
 import thunderstormIcon from "./assets/icons/thunderstorm.mp4";
+import mistyIcon from "./assets/icons/misty.mp4";
 
-const CurrentWeather = () => {
+const CurrentWeather = ({ onSearch }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState({ lat: null, lon: null });
 
@@ -56,9 +56,11 @@ const CurrentWeather = () => {
     }
   }, [location]);
 
-  const handleSearch = (city) => {
-    fetchWeather(null, null, city);
-  };
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(fetchWeather);
+    }
+  }, [onSearch]);
 
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp * 1000);
@@ -82,8 +84,6 @@ const CurrentWeather = () => {
 
   return (
     <>
-      <SearchBar onSearch={handleSearch} />
-
       <Card className="m-auto mt-4 p-2 font-mono bg-amber-300 place-content-center flex-1">
         {!weatherData && <Loading />}
 
@@ -112,7 +112,20 @@ const CurrentWeather = () => {
                 muted={true}
                 controls={false}
               />
-            ) : weatherData.weather?.[0]?.main === "Rain" ? (
+            ) : weatherData.weather?.[0]?.main === "Mist" ||
+              weatherData.weather?.[0]?.main === "Fog" ? (
+              <video
+                className="weatherIcon"
+                src={mistyIcon}
+                alt="mistyWeatherIcon"
+                type="video/mp4"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+                controls={false}
+              />
+            ) : weatherData.weather?.[0]?.main === "Rain" ||
+              weatherData.weather?.[0]?.main === "Drizzle" ? (
               <video
                 className="weatherIcon"
                 src={rainIcon}
@@ -145,7 +158,8 @@ const CurrentWeather = () => {
                 muted={true}
                 controls={false}
               />
-            ) : weatherData.weather?.[0]?.main === "Thunderstorm" ? (
+            ) : weatherData.weather?.[0]?.main === "Thunderstorm" ||
+              weatherData.weather?.[0]?.main === "Storm" ? (
               <video
                 className="weatherIcon"
                 src={thunderstormIcon}
@@ -156,9 +170,7 @@ const CurrentWeather = () => {
                 muted={true}
                 controls={false}
               />
-            ) : (
-              <p>Condition: {weatherData.weather?.[0]?.main}</p>
-            )}
+            ) : null}
 
             <CardTitle className="text-3xl text-amber-800">
               {Math.round(weatherData.main?.temp)}°C
@@ -176,6 +188,12 @@ const CurrentWeather = () => {
           <CardTitle className="text-lg text-amber-800 pl-2 pt-3">
             Weather Details
           </CardTitle>
+
+          {!weatherData && (
+            <p className="text-center text-gray-600 py-3">
+              Retrieving weather data...
+            </p>
+          )}
 
           {weatherData && (
             <div className="m-auto py-1 px-3 font-mono flex flex-col items-center justify-center">

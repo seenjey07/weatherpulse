@@ -49,6 +49,8 @@ const SearchBar = ({ onSearch }) => {
             ))}
           </ul>
         )}
+
+        {city === 0 && <p>No locations found.</p>}
       </form>
     </>
   );
