@@ -14,7 +14,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-600 to-indigo-300">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-600 to-indigo-400">
       <Header onSearch={handleSearch} />
       <CurrentWeather onSearch={(func) => (fetchWeatherRef.current = func)} />
       <Footer />
