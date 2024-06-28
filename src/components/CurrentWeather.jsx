@@ -84,11 +84,11 @@ const CurrentWeather = ({ onSearch }) => {
 
   return (
     <>
-      <Card className="m-auto mt-4 p-2 font-mono bg-amber-300 place-content-center flex-1">
+      <Card className="m-auto mt-2 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
         {!weatherData && <Loading />}
 
         {weatherData && (
-          <CardContent className="text-center py-3 gap-2">
+          <CardContent className="text-center pt-3 pb-1">
             {weatherData.weather?.[0]?.main === "Clear" ||
             weatherData.weather?.[0]?.main === "Sun" ? (
               <video
