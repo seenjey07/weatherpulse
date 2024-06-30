@@ -4,8 +4,8 @@ import SearchBar from "./SearchBar";
 
 const Header = ({ onSearch }) => {
   return (
-    <div className="px-4 md:px-8 flex items-center justify-between">
-      <div className="flex flex-row items-center flex-wrap pt-3">
+    <div className="px-8 py-2 flex items-center justify-between">
+      <div className="flex flex-row items-center flex-wrap">
         <img
           src={logo}
           alt="weatherPulseLogo"
