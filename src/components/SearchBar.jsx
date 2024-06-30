@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../global.css";
 import axios from "axios";
 import { Input } from "./ui/input";
 
@@ -60,7 +61,7 @@ const SearchBar = ({ onSearch }) => {
 
       <div className="absolute top-4 w-56 opacity-85 z-50 mt-1">
         {filteredLocations.length > 0 && city.length >= 1 ? (
-          <ul className="rounded-md p-1 text-sm bg-yellow-100 w-full overflow-auto scrollbar-thin scrollbar-bg-yellow-300">
+          <ul className="rounded-md p-1 text-sm bg-yellow-100 w-full overflow-y-auto">
             {filteredLocations.map((location) => (
               <li
                 key={`${location.lat}-${location.lon}`}
@@ -73,7 +74,7 @@ const SearchBar = ({ onSearch }) => {
           </ul>
         ) : (
           city.length > 0 && (
-            <p className="absolute text-nowrap text-red-500 p-1 mt-1 w-fit text-xs bg-red-100 rounded-md">
+            <p className="absolute text-center text-red-500 p-1 mt-0 w-full text-xs bg-red-100 rounded-md">
               Oops! Please try another city.
             </p>
           )

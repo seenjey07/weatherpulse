@@ -94,3 +94,20 @@
     height: 80px;
   }
 }
+
+::-webkit-scrollbar {
+  height: 7px;
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(247, 247, 176);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ead669;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #deec41;
+}
