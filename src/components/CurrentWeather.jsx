@@ -11,7 +11,7 @@ import windyIcon from "./assets/icons/windy.mp4";
 import thunderstormIcon from "./assets/icons/thunderstorm.mp4";
 import mistyIcon from "./assets/icons/misty.mp4";
 
-const CurrentWeather = ({ onSearch }) => {
+const CurrentWeather = ({ onSearch, onWeatherData }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState({ lat: null, lon: null });
 
@@ -30,6 +30,9 @@ const CurrentWeather = ({ onSearch }) => {
     try {
       const response = await axios.get(url.toString());
       setWeatherData(response.data);
+      if (onWeatherData) {
+        onWeatherData(response.data);
+      }
     } catch (error) {
       console.error("Error fetching the weather data", error);
     }
