@@ -57,12 +57,14 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
     if (location.lat && location.lon) {
       fetchWeather(location.lat, location.lon);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   useEffect(() => {
     if (onSearch) {
       onSearch(fetchWeather);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSearch]);
 
   const formatDateTime = (timestamp) => {
