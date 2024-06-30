@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Input } from "./ui/input";
-import { ScrollArea } from "./ui/scroll-area";
-
 import axios from "axios";
+import { Input } from "./ui/input";
 
 const SearchBar = ({ onSearch }) => {
   const [city, setCity] = useState("");
@@ -11,7 +9,7 @@ const SearchBar = ({ onSearch }) => {
   const fetchLocations = async (query) => {
     const url = new URL("https://api.openweathermap.org/geo/1.0/direct");
     url.searchParams.append("appid", "95450dccd5e90daf362271ca732cee70");
-    url.searchParams.append("limit", "7");
+    url.searchParams.append("limit", "5");
     url.searchParams.append("q", query);
 
     try {
@@ -27,10 +25,8 @@ const SearchBar = ({ onSearch }) => {
     const { value } = e.target;
     setCity(value);
 
-    if (value.length > 2) {
+    if (value.length > 0) {
       fetchLocations(value);
-    } else {
-      setFilteredLocations([]);
     }
   };
 
@@ -46,59 +42,44 @@ const SearchBar = ({ onSearch }) => {
   // };
 
   const handleLocationSelect = (location) => {
-    console.log("Location Selected", location);
-    setCity(location.name);
-    onSearch(city);
+    onSearch(location.name);
     setCity("");
     setFilteredLocations([]);
   };
 
   return (
-    <>
-      {/* <form onSubmit={handleSearch} className="flex flex-row m-auto text-sm"> */}
-      <div className="flex flex-col text-xs justify-center items-end gap-2">
-        <Input
-          type="text"
-          value={city}
-          onChange={handleChange}
-          placeholder="Enter city name..."
-          className="rounded-md p-1 bg-yellow-100 outline-none w-60"
-          required
-        />
+    <div className="relative flex flex-col text-xs justify-center items-end rounded-md">
+      <Input
+        type="text"
+        value={city}
+        onChange={handleChange}
+        placeholder="Enter city name..."
+        className="absolute py-1 px-2 bg-yellow-100 outline-none w-56 h-8"
+        required
+      />
 
-        <ScrollArea className="rounded-md z-50">
-          {filteredLocations.length > 0 && city.length > 0 ? (
-            <div className="p-1 leading-none bg-yellow-100 rounded-md">
-              <ul className="leading-none text-sm overflow-y-auto w-52 h-5rem">
-                {filteredLocations.map((location) => (
-                  <li
-                    key={`${location.lat}-${location.lon}`}
-                    onClick={() => handleLocationSelect(location)}
-                    className="cursor-pointer text-nowrap hover:bg-yellow-200"
-                  >
-                    {location.name}, {location.state}, {location.country}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            filteredLocations.length > 2 &&
-            city.length > 0 && (
-              <div className="mt-1 leading-none bg-red-100 rounded-md">
-                <ul>
-                  <li className="text-nowrap m-1 p-1 text-red-400">
-                    Oops! Please try another city.
-                  </li>
-                </ul>
-              </div>
-            )
-          )}
-        </ScrollArea>
+      <div className="absolute top-4 w-56 opacity-85 z-50 mt-1">
+        {filteredLocations.length > 0 && city.length >= 1 ? (
+          <ul className="rounded-md p-1 text-sm bg-yellow-100 w-full overflow-auto scrollbar-thin scrollbar-bg-yellow-300">
+            {filteredLocations.map((location) => (
+              <li
+                key={`${location.lat}-${location.lon}`}
+                onClick={() => handleLocationSelect(location)}
+                className="cursor-pointer text-nowrap hover:bg-yellow-200"
+              >
+                {location.name}, {location.state}, {location.country}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          city.length > 0 && (
+            <p className="absolute text-nowrap text-red-500 p-1 mt-1 w-fit text-xs bg-red-100 rounded-md">
+              Oops! Please try another city.
+            </p>
+          )
+        )}
       </div>
-
-      {/* <Button className="ml-2">Search</Button>
-      </form> */}
-    </>
+    </div>
   );
 };
 
