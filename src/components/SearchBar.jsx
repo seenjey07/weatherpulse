@@ -48,7 +48,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="relative flex flex-col text-xs justify-center items-end rounded-md">
+    <div className="relative flex flex-col items-center mb-4 md:mb-0 text-xs justify-center md:items-end rounded-md">
       <Input
         type="text"
         value={city}
