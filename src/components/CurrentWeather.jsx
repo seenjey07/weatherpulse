@@ -89,104 +89,106 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
 
   return (
     <>
-      <Card className="m-auto mt-2 mx-5 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
-        {!weatherData && <Loading />}
+      <div className="m-auto">
+        <Card className="mt-2 mx-5 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
+          {!weatherData && <Loading />}
 
-        {weatherData && (
-          <CardContent className="text-center pt-3 pb-1">
-            {weatherData.weather?.[0]?.main === "Clear" ||
-            weatherData.weather?.[0]?.main === "Sun" ? (
-              <video
-                src={clearIcon}
-                alt="clearWeatherIcon"
-                className="weatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Clouds" ? (
-              <video
-                className="weatherIcon"
-                src={cloudIcon}
-                alt="cloudyWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Mist" ||
-              weatherData.weather?.[0]?.main === "Fog" ? (
-              <video
-                className="weatherIcon"
-                src={mistyIcon}
-                alt="mistyWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Rain" ||
-              weatherData.weather?.[0]?.main === "Drizzle" ? (
-              <video
-                className="weatherIcon"
-                src={rainIcon}
-                alt="rainWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Snow" ? (
-              <video
-                className="weatherIcon"
-                src={snowIcon}
-                alt="snowWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Windy" ? (
-              <video
-                className="weatherIcon"
-                src={windyIcon}
-                alt="windWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : weatherData.weather?.[0]?.main === "Thunderstorm" ||
-              weatherData.weather?.[0]?.main === "Storm" ? (
-              <video
-                className="weatherIcon"
-                src={thunderstormIcon}
-                alt="thunderstormWeatherIcon"
-                type="video/mp4"
-                autoPlay={true}
-                loop={true}
-                muted={true}
-                controls={false}
-              />
-            ) : null}
+          {weatherData && (
+            <CardContent className="text-center pt-3 pb-1">
+              {weatherData.weather?.[0]?.main === "Clear" ||
+              weatherData.weather?.[0]?.main === "Sun" ? (
+                <video
+                  src={clearIcon}
+                  alt="clearWeatherIcon"
+                  className="weatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Clouds" ? (
+                <video
+                  className="weatherIcon"
+                  src={cloudIcon}
+                  alt="cloudyWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Mist" ||
+                weatherData.weather?.[0]?.main === "Fog" ? (
+                <video
+                  className="weatherIcon"
+                  src={mistyIcon}
+                  alt="mistyWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Rain" ||
+                weatherData.weather?.[0]?.main === "Drizzle" ? (
+                <video
+                  className="weatherIcon"
+                  src={rainIcon}
+                  alt="rainWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Snow" ? (
+                <video
+                  className="weatherIcon"
+                  src={snowIcon}
+                  alt="snowWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Windy" ? (
+                <video
+                  className="weatherIcon"
+                  src={windyIcon}
+                  alt="windWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : weatherData.weather?.[0]?.main === "Thunderstorm" ||
+                weatherData.weather?.[0]?.main === "Storm" ? (
+                <video
+                  className="weatherIcon"
+                  src={thunderstormIcon}
+                  alt="thunderstormWeatherIcon"
+                  type="video/mp4"
+                  autoPlay={true}
+                  loop={true}
+                  muted={true}
+                  controls={false}
+                />
+              ) : null}
 
-            <CardTitle className="text-3xl text-amber-800">
-              {Math.round(weatherData.main?.temp)}°C
-            </CardTitle>
-            <CardTitle className="pt-2">
-              {weatherData.name}, {weatherData.sys?.country}
-            </CardTitle>
-            <p className="pt-3">{formatDateTime(weatherData.dt)}</p>
-          </CardContent>
-        )}
-      </Card>
+              <CardTitle className="text-3xl text-amber-800">
+                {Math.round(weatherData.main?.temp)}°C
+              </CardTitle>
+              <CardTitle className="pt-2">
+                {weatherData.name}, {weatherData.sys?.country}
+              </CardTitle>
+              <p className="pt-3">{formatDateTime(weatherData.dt)}</p>
+            </CardContent>
+          )}
+        </Card>
+      </div>
 
       <div className="m-5 flex-1">
         <Card className="m-auto mt-3 font-mono bg-amber-300 py-2">
