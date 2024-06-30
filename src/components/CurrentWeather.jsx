@@ -89,7 +89,7 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
 
   return (
     <>
-      <Card className="m-auto mt-2 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
+      <Card className="m-auto mt-2 mx-5 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
         {!weatherData && <Loading />}
 
         {weatherData && (
