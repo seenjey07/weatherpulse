@@ -10,7 +10,7 @@ const SearchBar = ({ onSearch }) => {
   const fetchLocations = async (query) => {
     const url = new URL("https://api.openweathermap.org/geo/1.0/direct");
     url.searchParams.append("appid", "95450dccd5e90daf362271ca732cee70");
-    url.searchParams.append("limit", "5");
+    url.searchParams.append("limit", "0");
     url.searchParams.append("q", query);
 
     try {
@@ -28,6 +28,8 @@ const SearchBar = ({ onSearch }) => {
 
     if (value.length > 0) {
       fetchLocations(value);
+    } else {
+      setFilteredLocations([]);
     }
   };
 
@@ -56,17 +58,19 @@ const SearchBar = ({ onSearch }) => {
         onChange={handleChange}
         placeholder="Enter city name..."
         className="absolute py-1 px-2 bg-yellow-100 outline-none w-56 h-8"
+        suggestions={filteredLocations}
         required
       />
 
-      <div className="absolute top-4 w-56 opacity-85 z-50 mt-1">
+      <div className="absolute top-4 w-56 opacity-85 mt-1">
         {filteredLocations.length > 0 && city.length >= 1 ? (
-          <ul className="rounded-md p-1 text-sm bg-yellow-100 w-full overflow-y-auto">
+          <ul className="rounded-md p-1 text-sm bg-yellow-100 max-h-32 w-full overflow-auto">
             {filteredLocations.map((location) => (
               <li
                 key={`${location.lat}-${location.lon}`}
                 onClick={() => handleLocationSelect(location)}
-                className="cursor-pointer text-nowrap hover:bg-yellow-200"
+                className="text-nowrap hover:bg-yellow-200"
+                role="button"
               >
                 {location.name}, {location.state}, {location.country}
               </li>
