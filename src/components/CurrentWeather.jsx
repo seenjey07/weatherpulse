@@ -71,16 +71,17 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
 
   const formatDateTime = (timestamp) => {
     const date = new Date((timestamp + timezoneOffset) * 1000); //Note: We multiply the adjusted timestamp by 1000 to convert it from seconds to milliseconds
-    return `${date.toLocaleDateString("en-US", {
+    const options = {
       month: "long",
       day: "numeric",
       year: "numeric",
-    })} | ${date
-      .toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      })
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    };
+
+    return `${date.toLocaleDateString("en-US", options)} | ${date
+      .toLocaleTimeString("en-US", options)
       .toLowerCase()
       .replace(" ", "")}`;
   };
