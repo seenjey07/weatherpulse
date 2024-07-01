@@ -32,7 +32,6 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
       const response = await axios.get(url.toString());
       setWeatherData(response.data);
       setTimezone(response.data.timezone);
-      console.log(response.data.timezone);
       if (onWeatherData) {
         onWeatherData(response.data);
       }
