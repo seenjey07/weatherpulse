@@ -14,7 +14,6 @@ import mistyIcon from "./assets/icons/misty.mp4";
 const CurrentWeather = ({ onSearch, onWeatherData }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState({ lat: null, lon: null });
-  const [timezoneOffset, setTimezoneOffset] = useState(0);
 
   const fetchWeather = async (lat, lon, city) => {
     const url = new URL("https://api.openweathermap.org/data/2.5/weather");
@@ -31,7 +30,6 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
     try {
       const response = await axios.get(url.toString());
       setWeatherData(response.data);
-      setTimezoneOffset(response.data.timezone);
       if (onWeatherData) {
         onWeatherData(response.data);
       }
@@ -70,18 +68,17 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
   }, [onSearch]);
 
   const formatDateTime = (timestamp) => {
-    const date = new Date((timestamp + timezoneOffset) * 1000); //Note: We multiply the adjusted timestamp by 1000 to convert it from seconds to milliseconds
-    const options = {
+    const date = new Date(timestamp * 1000);
+    return `${date.toLocaleDateString("en-US", {
       month: "long",
       day: "numeric",
       year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    };
-
-    return `${date.toLocaleDateString("en-US", options)} | ${date
-      .toLocaleTimeString("en-US", options)
+    })} | ${date
+      .toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
       .toLowerCase()
       .replace(" ", "")}`;
   };
