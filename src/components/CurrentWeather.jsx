@@ -211,7 +211,7 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
             <div className="m-auto py-1 px-3 font-mono flex flex-col items-center justify-center">
               <div className="flex flex-row flex-nowrap m-auto text-center py-2">
                 <p className="flex flex-row flex-wrap justify-center">
-                  <b>Condition:</b>
+                  <b className="pr-2">Condition: </b>
                   {capitalizeFirstLetters(
                     weatherData.weather?.[0]?.description
                   )}
