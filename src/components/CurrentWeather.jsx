@@ -14,6 +14,7 @@ import mistyIcon from "./assets/icons/misty.mp4";
 const CurrentWeather = ({ onSearch, onWeatherData }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [location, setLocation] = useState({ lat: null, lon: null });
+  const [timezoneOffset, setTimezoneOffset] = useState(0);
 
   const fetchWeather = async (lat, lon, city) => {
     const url = new URL("https://api.openweathermap.org/data/2.5/weather");
@@ -30,6 +31,7 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
     try {
       const response = await axios.get(url.toString());
       setWeatherData(response.data);
+      setTimezoneOffset(response.data.timezone);
       if (onWeatherData) {
         onWeatherData(response.data);
       }
@@ -68,7 +70,7 @@ const CurrentWeather = ({ onSearch, onWeatherData }) => {
   }, [onSearch]);
 
   const formatDateTime = (timestamp) => {
-    const date = new Date(timestamp * 1000);
+    const date = new Date((timestamp + timezoneOffset) * 1000); //Note: We multiply the adjusted timestamp by 1000 to convert it from seconds to milliseconds
     return `${date.toLocaleDateString("locale", {
       month: "long",
       day: "numeric",
