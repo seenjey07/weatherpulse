@@ -76,16 +76,28 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Zain', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Limelight', cursive;
   }
 }
 
 .weatherIcon {
   width: 140px;
   height: 140px;
-  border: azure 1px double;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   margin: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.weatherIcon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -95,19 +107,27 @@
   }
 }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  height: 7px;
-  width: 7px;
+  height: 8px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(247, 247, 176);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ead669;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #deec41;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
