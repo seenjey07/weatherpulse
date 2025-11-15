@@ -1,87 +1,96 @@
-import React, { useState } from "react";
-import "../global.css";
-import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
 import { Input } from "./ui/input";
+import { useLocationSearch } from "../hooks/useLocationSearch";
+import { ERROR_MESSAGES } from "../constants";
+import { Search, Loader2 } from "lucide-react";
 
 const SearchBar = ({ onSearch }) => {
   const [city, setCity] = useState("");
-  const [filteredLocations, setFilteredLocations] = useState([]);
+  const { locations, isLoading, error, searchLocations, clearLocations } = useLocationSearch();
 
-  const fetchLocations = async (query) => {
-    const url = new URL("https://api.openweathermap.org/geo/1.0/direct");
-    url.searchParams.append("appid", "95450dccd5e90daf362271ca732cee70");
-    url.searchParams.append("limit", "0");
-    url.searchParams.append("q", query);
+  // Debounce search to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (city.trim().length > 0) {
+        searchLocations(city);
+      } else {
+        clearLocations();
+      }
+    }, 300);
 
-    try {
-      const response = await axios.get(url.toString());
-      setFilteredLocations(response.data);
-    } catch (error) {
-      console.error("Error fetching locations", error);
-      setFilteredLocations([]);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, [city, searchLocations, clearLocations]);
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { value } = e.target;
     setCity(value);
+  }, []);
 
-    if (value.length > 0) {
-      fetchLocations(value);
-    } else {
-      setFilteredLocations([]);
-    }
-  };
-
-  // const handleSearch = (e) => {
-  //   e.preventDefault();
-  //   if (city.trim()) {
-  //     onSearch(city);
-  //     setCity("");
-  //     setFilteredLocations([]);
-  //   } else {
-  //     setFilteredLocations([]);
-  //   }
-  // };
-
-  const handleLocationSelect = (location) => {
+  const handleLocationSelect = useCallback((location) => {
     onSearch(location.name);
     setCity("");
-    setFilteredLocations([]);
-  };
+    clearLocations();
+  }, [onSearch, clearLocations]);
+
+  const showSuggestions = locations.length > 0 && city.length >= 1;
+  const showError = error && city.length > 0 && locations.length === 0;
 
   return (
-    <div className="relative flex flex-col items-center mb-4 md:mb-0 text-xs justify-center md:items-end rounded-md">
-      <Input
-        type="text"
-        value={city}
-        onChange={handleChange}
-        placeholder="Enter city name..."
-        className="absolute py-1 px-2 bg-yellow-100 outline-none w-56 h-8"
-        suggestions={filteredLocations}
-        required
-      />
+    <div className="relative flex flex-col items-center mb-4 md:mb-0 justify-center md:items-end w-full max-w-sm">
+      <div className="relative w-full">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            value={city}
+            onChange={handleChange}
+            placeholder="Enter city name..."
+            className="pl-10 pr-10 w-full bg-background/80 backdrop-blur-sm border-2 focus:border-primary transition-colors"
+            required
+            aria-label="Search for a city"
+          />
+          {isLoading && (
+            <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+          )}
+        </div>
 
-      <div className="absolute top-4 w-56 opacity-85 mt-1">
-        {filteredLocations.length > 0 && city.length >= 1 ? (
-          <ul className="rounded-md p-1 text-sm bg-yellow-100 max-h-32 w-full overflow-auto">
-            {filteredLocations.map((location) => (
-              <li
-                key={`${location.lat}-${location.lon}`}
-                onClick={() => handleLocationSelect(location)}
-                className="text-nowrap hover:bg-yellow-200"
-                role="button"
-              >
-                {location.name}, {location.state}, {location.country}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          city.length > 0 && (
-            <p className="absolute text-center text-red-500 p-1 mt-0 w-full text-xs bg-red-100 rounded-md">
-              Oops! Please try another city.
+        {/* Suggestions Dropdown */}
+        {showSuggestions && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-card border-2 border-border rounded-md shadow-lg z-50 max-h-48 overflow-auto">
+            <ul className="py-1">
+              {locations.map((location) => (
+                <li
+                  key={`${location.lat}-${location.lon}`}
+                  onClick={() => handleLocationSelect(location)}
+                  className="px-4 py-2 hover:bg-accent cursor-pointer transition-colors text-sm"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleLocationSelect(location);
+                    }
+                  }}
+                  aria-label={`Select ${location.name}, ${location.state || ''}, ${location.country}`}
+                >
+                  <span className="font-medium">{location.name}</span>
+                  {location.state && (
+                    <span className="text-muted-foreground">, {location.state}</span>
+                  )}
+                  <span className="text-muted-foreground">, {location.country}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {showError && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-destructive/10 border border-destructive/20 rounded-md p-2 z-50">
+            <p className="text-xs text-destructive text-center">
+              {error || ERROR_MESSAGES.NO_LOCATION_FOUND}
             </p>
-          )
+          </div>
         )}
       </div>
     </div>
