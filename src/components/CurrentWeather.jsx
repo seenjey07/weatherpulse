@@ -1,9 +1,10 @@
 import React, { useEffect, useImperativeHandle, forwardRef } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import Loading from "./Loading";
+import WeatherCard from "./WeatherCard";
+import WeatherMetrics from "./WeatherMetrics";
 import { useWeather } from "../hooks/useWeather";
 import { useGeolocation } from "../hooks/useGeolocation";
-import { getWeatherIcon, formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
 import { AlertCircle } from "lucide-react";
 
 const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
@@ -28,108 +29,92 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
     fetchWeather: (lat, lon, city) => fetchWeather(lat, lon, city),
   }));
 
-  const weatherIcon = weatherData?.weather?.[0]?.main
-    ? getWeatherIcon(weatherData.weather[0].main)
-    : null;
-
   const timezone = weatherData?.timezone || 0;
 
   return (
     <>
       {/* Main Weather Card */}
-      <div className="m-auto max-w-2xl">
-        <Card className="mt-2 mx-5 px-2 pt-1 bg-card/80 backdrop-blur-sm border-2 shadow-lg">
-          {isLoading && <Loading />}
+      <div className="m-auto max-w-4xl px-4 sm:px-6">
+        {isLoading && (
+          <div className="mt-4">
+            <Loading />
+          </div>
+        )}
 
-          {error && (
+        {error && (
+          <Card className="mt-4 mx-5 bg-card/80 backdrop-blur-sm border-2 shadow-lg">
             <CardContent className="text-center pt-6 pb-4">
               <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-2" />
               <p className="text-destructive font-medium">{error}</p>
             </CardContent>
-          )}
-
-          {weatherData && !error && (
-            <CardContent className="text-center pt-3 pb-1">
-              {weatherIcon && (
-                <video
-                  src={weatherIcon}
-                  alt={`${weatherData.weather[0].main} weather icon`}
-                  className="weatherIcon"
-                  type="video/mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  aria-hidden="true"
-                />
-              )}
-
-              <CardTitle className="text-4xl font-bold text-primary mt-4">
-                {Math.round(weatherData.main?.temp)}°C
-              </CardTitle>
-              
-              <CardTitle className="pt-2 text-xl text-foreground">
-                {weatherData.name}, {weatherData.sys?.country}
-              </CardTitle>
-              
-              <p className="pt-3 text-sm text-muted-foreground">
-                {formatDateTime(weatherData.dt, timezone)}
-              </p>
-            </CardContent>
-          )}
-        </Card>
-      </div>
-
-      {/* Weather Details Card */}
-      {weatherData && !error && (
-        <div className="m-5 max-w-2xl mx-auto">
-          <Card className="m-auto mt-3 bg-card/80 backdrop-blur-sm border-2 shadow-lg py-2">
-            <CardTitle className="text-lg text-primary pl-4 pt-3">
-              Weather Details
-            </CardTitle>
-
-            <div className="m-auto py-1 px-3 flex flex-col items-center justify-center">
-              <div className="flex flex-row flex-wrap gap-4 m-auto text-center py-2 justify-center">
-                <p className="flex flex-row flex-wrap justify-center gap-1">
-                  <b className="text-foreground">Condition:</b>
-                  <span className="text-muted-foreground">
-                    {capitalizeFirstLetters(weatherData.weather?.[0]?.description)}
-                  </span>
-                </p>
-                <p className="flex flex-row gap-1">
-                  <b className="text-foreground">Wind Speed:</b>
-                  <span className="text-muted-foreground">
-                    {weatherData.wind?.speed}m/s
-                  </span>
-                </p>
-                <p className="flex flex-row gap-1">
-                  <b className="text-foreground">Humidity:</b>
-                  <span className="text-muted-foreground">
-                    {weatherData.main?.humidity}%
-                  </span>
-                </p>
-              </div>
-              
-              <hr className="w-full border-border my-2" />
-              
-              <div className="text-center pt-2 space-y-1">
-                <p className="flex flex-row gap-2 justify-center">
-                  <b className="text-foreground">Sunrise:</b>
-                  <span className="text-muted-foreground">
-                    {formatDateTime(weatherData.sys?.sunrise, timezone)}
-                  </span>
-                </p>
-                <p className="flex flex-row gap-2 justify-center">
-                  <b className="text-foreground">Sunset:</b>
-                  <span className="text-muted-foreground">
-                    {formatDateTime(weatherData.sys?.sunset, timezone)}
-                  </span>
-                </p>
-              </div>
-            </div>
           </Card>
-        </div>
-      )}
+        )}
+
+        {weatherData && !error && (
+          <>
+            <div className="mt-4 animate-slide-in">
+              <WeatherCard weatherData={weatherData} timezone={timezone} />
+            </div>
+
+            {/* Weather Metrics Grid */}
+            <div className="mt-6 animate-slide-in">
+              <Card className="bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+                <CardContent className="p-4 md:p-6">
+                  <CardTitle className="text-lg text-primary mb-4">
+                    Weather Details
+                  </CardTitle>
+                  <WeatherMetrics weatherData={weatherData} timezone={timezone} />
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sunrise/Sunset Card */}
+            <div className="mt-6 animate-slide-in">
+              <Card className="bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+                <CardContent className="p-4 md:p-6">
+                  <CardTitle className="text-lg text-primary mb-4">
+                    Sun Times
+                  </CardTitle>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
+                      <div className="p-2 rounded-lg bg-orange-500/10">
+                        <span className="text-2xl">🌅</span>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Sunrise</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          {new Date((weatherData.sys?.sunrise + timezone) * 1000)
+                            .toLocaleTimeString("en-US", {
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
+                      <div className="p-2 rounded-lg bg-orange-500/10">
+                        <span className="text-2xl">🌇</span>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Sunset</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          {new Date((weatherData.sys?.sunset + timezone) * 1000)
+                            .toLocaleTimeString("en-US", {
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 });
