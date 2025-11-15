@@ -8,6 +8,10 @@ import Header from "./components/Header";
 function App() {
   const fetchWeatherRef = useRef(null);
   const [isDaytime, setIsDaytime] = useState(true);
+  const [settings, setSettings] = useState(() => {
+    const saved = localStorage.getItem("weatherSettings");
+    return saved ? JSON.parse(saved) : { temperatureUnit: "celsius", windSpeedUnit: "ms" };
+  });
 
   const handleSearch = useCallback((city) => {
     if (fetchWeatherRef.current) {
@@ -23,6 +27,10 @@ function App() {
     }
   }, []);
 
+  const handleSettingsChange = useCallback((newSettings) => {
+    setSettings(newSettings);
+  }, []);
+
   const handleError = useCallback((error, errorInfo) => {
     console.error("Application error:", error, errorInfo);
   }, []);
@@ -36,11 +44,12 @@ function App() {
             : "bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900"
         }`}
       >
-        <Header onSearch={handleSearch} />
-        <main className="flex-1">
+        <Header onSearch={handleSearch} onSettingsChange={handleSettingsChange} />
+        <main className="flex-1 pb-8">
           <CurrentWeather
             ref={fetchWeatherRef}
             onWeatherData={handleWeatherData}
+            settings={settings}
           />
         </main>
         <Footer />
