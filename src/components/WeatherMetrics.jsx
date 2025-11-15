@@ -6,13 +6,8 @@ import {
   Gauge,
   Eye,
   Cloud,
-  Sun,
-  Sunset,
-  Sunrise,
   Thermometer,
-  GaugeCircle,
 } from "lucide-react";
-import { formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
 
 const WeatherMetrics = ({ weatherData, timezone }) => {
   if (!weatherData) return null;
