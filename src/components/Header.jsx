@@ -4,25 +4,21 @@ import SearchBar from "./SearchBar";
 
 const Header = ({ onSearch }) => {
   return (
-    <div className="px-8 py-2 flex flex-col items-center justify-between md:flex-row">
-      <div className="flex items-center mb-2 md:mb-0">
+    <header className="px-4 sm:px-8 py-4 flex flex-col items-center justify-between gap-4 md:flex-row bg-background/10 backdrop-blur-sm border-b border-border/20">
+      <div className="flex items-center gap-3">
         <img
           src={logo}
-          alt="weatherPulseLogo"
-          style={{
-            width: "130px",
-            height: "130px",
-            objectFit: "contain",
-          }}
-          className="logo mb-4 md:mb-0"
+          alt="WeatherPulse Logo"
+          className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain transition-transform hover:scale-105"
+          loading="eager"
         />
-        <h2 className="text-xl font-bold font-mono text-amber-400 mr-4 md:mr-0">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary drop-shadow-lg">
           WeatherPulse
-        </h2>
+        </h1>
       </div>
 
       <SearchBar onSearch={onSearch} />
-    </div>
+    </header>
   );
 };
 
