@@ -1,243 +1,139 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Loading from "./Loading";
+import React, { useEffect, useImperativeHandle, forwardRef } from "react";
 import { Card, CardContent, CardTitle } from "./ui/card";
+import Loading from "./Loading";
+import { useWeather } from "../hooks/useWeather";
+import { useGeolocation } from "../hooks/useGeolocation";
+import { getWeatherIcon, formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
+import { AlertCircle } from "lucide-react";
 
-import clearIcon from "./assets/icons/sun.mp4";
-import cloudIcon from "./assets/icons/cloudy.mp4";
-import rainIcon from "./assets/icons/rain.mp4";
-import snowIcon from "./assets/icons/snow.mp4";
-import windyIcon from "./assets/icons/windy.mp4";
-import thunderstormIcon from "./assets/icons/thunderstorm.mp4";
-import mistyIcon from "./assets/icons/misty.mp4";
+const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
+  const { location } = useGeolocation();
+  const { weatherData, isLoading, error, fetchWeather } = useWeather();
 
-const CurrentWeather = ({ onSearch, onWeatherData }) => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [location, setLocation] = useState({ lat: null, lon: null });
-  const [timezone, setTimezone] = useState(null);
-
-  const fetchWeather = async (lat, lon, city) => {
-    const url = new URL("https://api.openweathermap.org/data/2.5/weather");
-    url.searchParams.append("appid", "95450dccd5e90daf362271ca732cee70");
-    url.searchParams.append("units", "metric");
-
-    if (city) {
-      url.searchParams.append("q", city);
-    } else if (lat && lon) {
-      url.searchParams.append("lat", lat);
-      url.searchParams.append("lon", lon);
-    }
-
-    try {
-      const response = await axios.get(url.toString());
-      setWeatherData(response.data);
-      setTimezone(response.data.timezone);
-      if (onWeatherData) {
-        onWeatherData(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching the weather data", error);
-    }
-  };
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        (error) => console.error("Geolocation error: ", error),
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    }
-  }, []);
 
   useEffect(() => {
     if (location.lat && location.lon) {
-      fetchWeather(location.lat, location.lon);
+      fetchWeather(location.lat, location.lon, null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  }, [location, fetchWeather]);
+
 
   useEffect(() => {
-    if (onSearch) {
-      onSearch(fetchWeather);
+    if (weatherData && onWeatherData) {
+      onWeatherData(weatherData);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSearch]);
+  }, [weatherData, onWeatherData]);
 
-  const formatDateTime = (timestamp) => {
-    const date = new Date((timestamp + timezone) * 1000);
-    const localDate = new Date(
-      date.getTime() + date.getTimezoneOffset() * 60000
-    );
-    return `${localDate.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    })} | ${localDate
-      .toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      })
-      .toLowerCase()
-      .replace(" ", "")}`;
-  };
+  useImperativeHandle(ref, () => ({
+    fetchWeather: (lat, lon, city) => fetchWeather(lat, lon, city),
+  }));
 
-  const capitalizeFirstLetters = (str) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  };
+  const weatherIcon = weatherData?.weather?.[0]?.main
+    ? getWeatherIcon(weatherData.weather[0].main)
+    : null;
+
+  const timezone = weatherData?.timezone || 0;
 
   return (
     <>
-      <div className="m-auto">
-        <Card className="mt-2 mx-5 px-2 pt-1 font-mono bg-amber-300 place-content-center flex-1">
-          {!weatherData && <Loading />}
+      {/* Main Weather Card */}
+      <div className="m-auto max-w-2xl">
+        <Card className="mt-2 mx-5 px-2 pt-1 bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+          {isLoading && <Loading />}
 
-          {weatherData && (
+          {error && (
+            <CardContent className="text-center pt-6 pb-4">
+              <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-2" />
+              <p className="text-destructive font-medium">{error}</p>
+            </CardContent>
+          )}
+
+          {weatherData && !error && (
             <CardContent className="text-center pt-3 pb-1">
-              {weatherData.weather?.[0]?.main === "Clear" ||
-              weatherData.weather?.[0]?.main === "Sun" ? (
+              {weatherIcon && (
                 <video
-                  src={clearIcon}
-                  alt="clearWeatherIcon"
+                  src={weatherIcon}
+                  alt={`${weatherData.weather[0].main} weather icon`}
                   className="weatherIcon"
                   type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  aria-hidden="true"
                 />
-              ) : weatherData.weather?.[0]?.main === "Clouds" ? (
-                <video
-                  className="weatherIcon"
-                  src={cloudIcon}
-                  alt="cloudyWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : weatherData.weather?.[0]?.main === "Mist" ||
-                weatherData.weather?.[0]?.main === "Fog" ? (
-                <video
-                  className="weatherIcon"
-                  src={mistyIcon}
-                  alt="mistyWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : weatherData.weather?.[0]?.main === "Rain" ||
-                weatherData.weather?.[0]?.main === "Drizzle" ? (
-                <video
-                  className="weatherIcon"
-                  src={rainIcon}
-                  alt="rainWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : weatherData.weather?.[0]?.main === "Snow" ? (
-                <video
-                  className="weatherIcon"
-                  src={snowIcon}
-                  alt="snowWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : weatherData.weather?.[0]?.main === "Windy" ? (
-                <video
-                  className="weatherIcon"
-                  src={windyIcon}
-                  alt="windWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : weatherData.weather?.[0]?.main === "Thunderstorm" ||
-                weatherData.weather?.[0]?.main === "Storm" ? (
-                <video
-                  className="weatherIcon"
-                  src={thunderstormIcon}
-                  alt="thunderstormWeatherIcon"
-                  type="video/mp4"
-                  autoPlay={true}
-                  loop={true}
-                  muted={true}
-                  controls={false}
-                />
-              ) : null}
+              )}
 
-              <CardTitle className="text-3xl text-amber-800">
+              <CardTitle className="text-4xl font-bold text-primary mt-4">
                 {Math.round(weatherData.main?.temp)}°C
               </CardTitle>
-              <CardTitle className="pt-2">
+              
+              <CardTitle className="pt-2 text-xl text-foreground">
                 {weatherData.name}, {weatherData.sys?.country}
               </CardTitle>
-              <p className="pt-3">{formatDateTime(weatherData.dt)}</p>
+              
+              <p className="pt-3 text-sm text-muted-foreground">
+                {formatDateTime(weatherData.dt, timezone)}
+              </p>
             </CardContent>
           )}
         </Card>
       </div>
 
-      <div className="m-5 flex-1">
-        <Card className="m-auto mt-3 font-mono bg-amber-300 py-2">
-          <CardTitle className="text-lg text-amber-800 pl-2 pt-3">
-            Weather Details
-          </CardTitle>
+      {/* Weather Details Card */}
+      {weatherData && !error && (
+        <div className="m-5 max-w-2xl mx-auto">
+          <Card className="m-auto mt-3 bg-card/80 backdrop-blur-sm border-2 shadow-lg py-2">
+            <CardTitle className="text-lg text-primary pl-4 pt-3">
+              Weather Details
+            </CardTitle>
 
-          {!weatherData && (
-            <p className="text-center text-gray-600 py-3">
-              Retrieving weather data...
-            </p>
-          )}
-
-          {weatherData && (
-            <div className="m-auto py-1 px-3 font-mono flex flex-col items-center justify-center">
-              <div className="flex flex-row flex-nowrap m-auto text-center py-2">
-                <p className="flex flex-row flex-wrap justify-center">
-                  <b className="pr-2">Condition: </b>
-                  {capitalizeFirstLetters(
-                    weatherData.weather?.[0]?.description
-                  )}
+            <div className="m-auto py-1 px-3 flex flex-col items-center justify-center">
+              <div className="flex flex-row flex-wrap gap-4 m-auto text-center py-2 justify-center">
+                <p className="flex flex-row flex-wrap justify-center gap-1">
+                  <b className="text-foreground">Condition:</b>
+                  <span className="text-muted-foreground">
+                    {capitalizeFirstLetters(weatherData.weather?.[0]?.description)}
+                  </span>
                 </p>
-                <p className="px-3">
-                  <b>Wind Speed:</b> {weatherData.wind?.speed}m/s
+                <p className="flex flex-row gap-1">
+                  <b className="text-foreground">Wind Speed:</b>
+                  <span className="text-muted-foreground">
+                    {weatherData.wind?.speed}m/s
+                  </span>
                 </p>
-                <p>
-                  <b>Humidity:</b> {weatherData.main?.humidity}%
+                <p className="flex flex-row gap-1">
+                  <b className="text-foreground">Humidity:</b>
+                  <span className="text-muted-foreground">
+                    {weatherData.main?.humidity}%
+                  </span>
                 </p>
               </div>
-              <hr className="w-full" />
-              <div className="text-center pt-2">
-                <p>
-                  <b>Sunrise:</b> {formatDateTime(weatherData.sys?.sunrise)}
+              
+              <hr className="w-full border-border my-2" />
+              
+              <div className="text-center pt-2 space-y-1">
+                <p className="flex flex-row gap-2 justify-center">
+                  <b className="text-foreground">Sunrise:</b>
+                  <span className="text-muted-foreground">
+                    {formatDateTime(weatherData.sys?.sunrise, timezone)}
+                  </span>
                 </p>
-                <p>
-                  <b>Sunset:</b> {formatDateTime(weatherData.sys?.sunset)}
+                <p className="flex flex-row gap-2 justify-center">
+                  <b className="text-foreground">Sunset:</b>
+                  <span className="text-muted-foreground">
+                    {formatDateTime(weatherData.sys?.sunset, timezone)}
+                  </span>
                 </p>
               </div>
             </div>
-          )}
-        </Card>
-      </div>
+          </Card>
+        </div>
+      )}
     </>
   );
-};
+});
+
+CurrentWeather.displayName = "CurrentWeather";
 
 export default CurrentWeather;
