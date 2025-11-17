@@ -35,12 +35,14 @@ const Header = ({ onSearch, onSettingsChange }) => {
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-end">
-          <SearchBar onSearch={onSearch} />
+          <div className="flex-1 md:flex-none">
+            <SearchBar onSearch={onSearch} />
+          </div>
           <Button
             variant="outline"
             size="icon"
             onClick={() => setIsSettingsOpen(true)}
-            className="flex-shrink-0"
+            className="flex-shrink-0 h-10 w-10 self-center"
             aria-label="Open settings"
           >
             <SettingsIcon className="h-5 w-5" />
