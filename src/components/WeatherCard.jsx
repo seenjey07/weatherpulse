@@ -17,7 +17,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
   const condition = capitalizeFirstLetters(weatherData.weather?.[0]?.description || "");
 
   return (
-    <Card className="bg-card/90 backdrop-blur-md border-2 shadow-xl overflow-hidden">
+    <Card className="bg-gradient-to-br from-blue-50/95 via-indigo-50/95 to-purple-50/95 dark:from-blue-950/95 dark:via-indigo-950/95 dark:to-purple-950/95 backdrop-blur-md border-2 border-primary/20 shadow-xl overflow-hidden">
       <CardContent className="p-6">
         {/* Location and Date */}
         <div className="flex items-center justify-between mb-4">
