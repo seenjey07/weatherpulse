@@ -42,7 +42,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
         )}
 
         {error && (
-          <Card className="mt-4 mx-5 bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+          <Card className="mt-4 mx-5 bg-gradient-to-br from-red-50/90 via-rose-50/90 to-pink-50/90 dark:from-red-950/90 dark:via-rose-950/90 dark:to-pink-950/90 backdrop-blur-sm border-2 border-destructive/30 shadow-lg">
             <CardContent className="text-center pt-6 pb-4">
               <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-2" />
               <p className="text-destructive font-medium">{error}</p>
@@ -58,7 +58,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
 
             {/* Weather Metrics Grid */}
             <div className="mt-6 animate-slide-in">
-              <Card className="bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+              <Card className="bg-gradient-to-br from-cyan-50/90 via-teal-50/90 to-emerald-50/90 dark:from-cyan-950/90 dark:via-teal-950/90 dark:to-emerald-950/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
                 <CardContent className="p-4 md:p-6">
                   <CardTitle className="text-lg text-primary mb-4">
                     Weather Details
@@ -70,7 +70,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
 
             {/* Sunrise/Sunset Card */}
             <div className="mt-6 animate-slide-in">
-              <Card className="bg-card/80 backdrop-blur-sm border-2 shadow-lg">
+              <Card className="bg-gradient-to-br from-amber-50/90 via-orange-50/90 to-yellow-50/90 dark:from-amber-950/90 dark:via-orange-950/90 dark:to-yellow-950/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
                 <CardContent className="p-4 md:p-6">
                   <CardTitle className="text-lg text-primary mb-4">
                     Sun Times
