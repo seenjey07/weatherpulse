@@ -4,8 +4,8 @@
  */
 
 import axios from "axios";
-import { API_CONFIG, API_ENDPOINTS, ERROR_MESSAGES } from "../constants";
-import { createSuccessResponse, handleApiError } from "./types";
+import { API_CONFIG, API_ENDPOINTS } from "../constants";
+import { createSuccessResponse, createErrorResponse, handleApiError } from "./types";
 
 /**
  * Fetch current weather data by coordinates or city name
@@ -60,4 +60,3 @@ export const fetchLocations = async (query) => {
     return handleApiError(error);
   }
 };
-
