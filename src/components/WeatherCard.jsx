@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent} from "./ui/card";
 import { getWeatherIcon, formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
-import { MapPin, Calendar, ThermometerSun, ThermometerSnow } from "lucide-react";
+import { MapPin, Calendar, ThermometerSun, Snowflake } from "lucide-react";
 
 const WeatherCard = ({ weatherData, timezone }) => {
   if (!weatherData) return null;
@@ -71,7 +71,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
                 <span className="text-foreground font-medium">{tempMax}°</span>
               </div>
               <div className="flex items-center gap-1 text-sm">
-                <ThermometerSnow className="h-4 w-4 text-blue-500" />
+                <Snowflake className="h-4 w-4 text-blue-500" />
                 <span className="text-foreground font-medium">{tempMin}°</span>
               </div>
               <div className="text-sm text-muted-foreground">
