@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardTitle } from "./ui/card";
+import { Card, CardContent} from "./ui/card";
 import { getWeatherIcon, formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
 import { MapPin, Calendar, ThermometerSun, ThermometerSnow } from "lucide-react";
 
