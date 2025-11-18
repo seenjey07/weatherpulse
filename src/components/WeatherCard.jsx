@@ -68,14 +68,14 @@ const WeatherCard = ({ weatherData, timezone }) => {
             <div className="flex items-center justify-center md:justify-start gap-4 mt-4">
               <div className="flex items-center gap-1 text-sm">
                 <ThermometerSun className="h-4 w-4 text-orange-500" />
-                <span className="text-foreground font-medium">{tempMax}°</span>
+                <span className="text-foreground font-medium">{tempMax}{tempUnit}</span>
               </div>
               <div className="flex items-center gap-1 text-sm">
                 <Snowflake className="h-4 w-4 text-blue-500" />
-                <span className="text-foreground font-medium">{tempMin}°</span>
+                <span className="text-foreground font-medium">{tempMin}{tempUnit}</span>
               </div>
               <div className="text-sm text-muted-foreground">
-                Feels like {feelsLike}°
+                Feels like {feelsLike}{tempUnit}
               </div>
             </div>
           </div>
