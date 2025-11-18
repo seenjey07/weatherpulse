@@ -55,7 +55,7 @@ const SearchBar = ({ onSearch }) => {
 
         {/* Suggestions Dropdown */}
         {showSuggestions && (
-          <div className="glass-card absolute left-0 right-0 mt-1 max-h-48 overflow-auto">
+          <div className="absolute bg-secondary/70 rounded-xl backdrop-blur-sm left-0 right-0 mt-2 max-h-48 overflow-auto">
             <ul className="py-1">
               {locations.map((location) => (
                 <li
@@ -85,8 +85,8 @@ const SearchBar = ({ onSearch }) => {
 
         {/* Error Message */}
         {showError && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-destructive/10 border border-destructive/20 rounded-md p-2 z-50">
-            <p className="text-xs text-destructive text-center">
+          <div className="absolute top-full left-0 right-0 mt-3 bg-destructive/80 border border-destructive/40 rounded-md p-2 z-50">
+            <p className="text-xs text-input text-center">
               {error || ERROR_MESSAGES.NO_LOCATION_FOUND}
             </p>
           </div>
