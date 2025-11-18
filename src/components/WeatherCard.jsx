@@ -15,6 +15,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
   const tempMin = Math.round(weatherData.main?.temp_min || 0);
   const tempMax = Math.round(weatherData.main?.temp_max || 0);
   const condition = capitalizeFirstLetters(weatherData.weather?.[0]?.description || "");
+  const tempUnit = weatherData.units?.temperature || "°C";
 
 
   return (
@@ -57,7 +58,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
           <div className="flex-1 md:text-left">
             <div className="mb-2 text-center">
               <p className="text-6xl md:text-7xl font-bold text-foreground leading-none">
-                {temp}°
+                {temp}{tempUnit}
               </p>
               <p className="text-lg text-muted-foreground mt-1">
                 {condition}
