@@ -5,7 +5,7 @@ import WeatherCard from "./WeatherCard";
 import WeatherMetrics from "./WeatherMetrics";
 import { useWeather } from "../hooks/useWeather";
 import { useGeolocation } from "../hooks/useGeolocation";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Sunrise, Sunset } from "lucide-react";
 
 const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
   const { location } = useGeolocation();
@@ -34,9 +34,9 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
   return (
     <>
       {/* Main Weather Card */}
-      <div className="m-auto max-w-4xl px-4 sm:px-6">
+      <div className="m-auto max-w-4xl px-4 sm:px-6 z-40">
         {isLoading && (
-          <div className="mt-4">
+          <div className="mt-24">
             <Loading />
           </div>
         )}
@@ -58,7 +58,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
 
             {/* Weather Metrics Grid */}
             <div className="mt-6 animate-slide-in">
-              <Card className="bg-gradient-to-br from-cyan-50/90 via-teal-50/90 to-emerald-50/90 dark:from-cyan-950/90 dark:via-teal-950/90 dark:to-emerald-950/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
+              <Card className="bg-gradient-to-br from-cyan-50/90 via-teal-50/90 to-emerald-50/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
                 <CardContent className="p-4 md:p-6">
                   <CardTitle className="text-lg text-primary mb-4">
                     Weather Details
@@ -70,18 +70,18 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
 
             {/* Sunrise/Sunset Card */}
             <div className="mt-6 animate-slide-in">
-              <Card className="bg-gradient-to-br from-amber-50/90 via-orange-50/90 to-yellow-50/90 dark:from-amber-950/90 dark:via-orange-950/90 dark:to-yellow-950/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
+              <Card className="bg-gradient-to-br from-cyan-50/90 via-teal-50/90 to-emerald-50/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg">
                 <CardContent className="p-4 md:p-6">
                   <CardTitle className="text-lg text-primary mb-4">
-                    Sun Times
+                    Sunrise/Sunset
                   </CardTitle>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
-                      <div className="p-2 rounded-lg bg-orange-500/10">
-                        <span className="text-2xl">🌅</span>
+                      <div className="p-2 rounded-lg bg-transparent">
+                        <span className="text-2xl text-yellow-400"><Sunrise /></span>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">Sunrise</p>
+                        <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunrise</p>
                         <p className="text-sm font-semibold text-foreground">
                           {new Date((weatherData.sys?.sunrise + timezone) * 1000)
                             .toLocaleTimeString("en-US", {
@@ -93,11 +93,11 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
-                      <div className="p-2 rounded-lg bg-orange-500/10">
-                        <span className="text-2xl">🌇</span>
+                      <div className="p-2 rounded-lg bg-transparent">
+                        <span className="text-2xl text-orange-500"><Sunset /></span>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1">Sunset</p>
+                        <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunset</p>
                         <p className="text-sm font-semibold text-foreground">
                           {new Date((weatherData.sys?.sunset + timezone) * 1000)
                             .toLocaleTimeString("en-US", {
