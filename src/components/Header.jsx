@@ -21,7 +21,7 @@ const Header = ({ onSearch, onSettingsChange }) => {
 
   return (
     <>
-      <header className="glass-card sticky top-0 z-50 px-4 sm:px-8 py-4 flex flex-col items-center justify-between gap-4 md:flex-row bg-background/10 border-b border-border/20 rounded-b-3xl">
+      <header className="glass-card sticky top-0 z-50 px-4 sm:px-8 py-4 flex flex-col items-center justify-between gap-4 md:flex-row rounded-b-3xl">
         <div className="flex items-center gap-1">
           <img
             src={logo}
@@ -29,7 +29,7 @@ const Header = ({ onSearch, onSettingsChange }) => {
             className="w-14 h-14 object-contain transition-transform hover:scale-105"
             loading="eager"
           />
-          <h1 className="text-xl sm:text-md font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-md font-bold text-foreground">
             WeatherPulse
           </h1>
         </div>
