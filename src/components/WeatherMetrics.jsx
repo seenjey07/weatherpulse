@@ -8,15 +8,19 @@ import {
   Cloud,
   Thermometer,
 } from "lucide-react";
+import { formatWindSpeed, formatTemperature } from "../utils/unitConverter";
 
-const WeatherMetrics = ({ weatherData, timezone }) => {
+const WeatherMetrics = ({ weatherData, timezone, settings }) => {
   if (!weatherData) return null;
+
+  const windSpeedUnit = settings?.windSpeedUnit || "ms";
+  const temperatureUnit = settings?.temperatureUnit || "celsius";
 
   const metrics = [
     {
       icon: Wind,
       label: "Wind Speed",
-      value: `${weatherData.wind?.speed || 0} m/s`,
+      value: formatWindSpeed(weatherData.wind?.speed || 0, windSpeedUnit),
       description: weatherData.wind?.deg
         ? `${getWindDirection(weatherData.wind.deg)}`
         : null,
@@ -48,7 +52,7 @@ const WeatherMetrics = ({ weatherData, timezone }) => {
     {
       icon: Thermometer,
       label: "Feels Like",
-      value: `${Math.round(weatherData.main?.feels_like || 0)}°C`,
+      value: formatTemperature(weatherData.main?.feels_like || 0, temperatureUnit),
       description: getFeelsLikeDescription(
         weatherData.main?.feels_like,
         weatherData.main?.temp
