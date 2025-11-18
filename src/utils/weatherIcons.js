@@ -43,37 +43,77 @@ export const getWeatherIcon = (condition) => {
 };
 
 /**
- * Format date and time from timestamp
- * @param {number} timestamp - Unix timestamp
- * @param {number} timezone - Timezone offset in seconds
- * @returns {string} - Formatted date and time string
+ * @param {number} timestamp 
+ * @param {number} timezone 
+ * @returns {string} 
+ */
+export const formatTime = (timestamp, timezone) => {
+  if (!timestamp) return "";
+  
+
+  const totalSeconds = timestamp + timezone;
+  
+
+  let hours = Math.floor((totalSeconds % 86400) / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  
+
+  if (hours < 0) {
+    hours += 24;
+  }
+  if (minutes < 0) {
+    minutes += 60;
+    hours -= 1;
+    if (hours < 0) {
+      hours += 24;
+    }
+  }
+  
+
+  hours = hours % 24;
+  
+  const ampm = hours >= 12 ? "pm" : "am";
+  const displayHours = hours % 12 || 12;
+  const displayMinutes = String(Math.abs(minutes)).padStart(2, "0");
+  
+  return `${displayHours}:${displayMinutes}${ampm}`;
+};
+
+/**
+ * @param {number} timestamp 
+ * @param {number} timezone 
+ * @returns {string}
  */
 export const formatDateTime = (timestamp, timezone) => {
   if (!timestamp) return "";
   
-  const date = new Date((timestamp + timezone) * 1000);
-  const localDate = new Date(
-    date.getTime() + date.getTimezoneOffset() * 60000
-  );
+
+  const totalSeconds = timestamp + timezone;
+  const localDate = new Date(totalSeconds * 1000);
+  const year = localDate.getUTCFullYear();
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+  const month = monthNames[localDate.getUTCMonth()];
+  const day = localDate.getUTCDate();
   
-  return `${localDate.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  })} | ${localDate
-    .toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(" ", "")}`;
+
+  let hours = localDate.getUTCHours();
+  let minutes = localDate.getUTCMinutes();
+  
+
+  hours = hours % 24;
+  if (hours < 0) hours += 24;
+  
+  const ampm = hours >= 12 ? "pm" : "am";
+  const displayHours = hours % 12 || 12;
+  const displayMinutes = String(minutes).padStart(2, "0");
+  
+  return `${month} ${day}, ${year} | ${displayHours}:${displayMinutes}${ampm}`;
 };
 
 /**
- * Capitalize first letter of each word
- * @param {string} str - String to capitalize
- * @returns {string} - Capitalized string
+ * @param {string} str 
+ * @returns {string}
  */
 export const capitalizeFirstLetters = (str) => {
   if (!str) return "";
