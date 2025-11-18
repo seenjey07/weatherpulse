@@ -1,21 +1,24 @@
 import React from "react";
 import { Card, CardContent} from "./ui/card";
 import { getWeatherIcon, formatDateTime, capitalizeFirstLetters } from "../utils/weatherIcons";
+import { formatTemperature } from "../utils/unitConverter";
 import { MapPin, Calendar, ThermometerSun, Snowflake } from "lucide-react";
 
-const WeatherCard = ({ weatherData, timezone }) => {
+const WeatherCard = ({ weatherData, timezone, settings }) => {
   if (!weatherData) return null;
 
   const weatherIcon = weatherData?.weather?.[0]?.main
     ? getWeatherIcon(weatherData.weather[0].main)
     : null;
 
-  const temp = Math.round(weatherData.main?.temp || 0);
-  const feelsLike = Math.round(weatherData.main?.feels_like || 0);
-  const tempMin = Math.round(weatherData.main?.temp_min || 0);
-  const tempMax = Math.round(weatherData.main?.temp_max || 0);
+  const temp = weatherData.main?.temp || 0;
+  const feelsLike = weatherData.main?.feels_like || 0;
+  const tempMin = weatherData.main?.temp_min || 0;
+  const tempMax = weatherData.main?.temp_max || 0;
   const condition = capitalizeFirstLetters(weatherData.weather?.[0]?.description || "");
-  const tempUnit = weatherData.units?.temperature || "°C";
+  
+  // Get temperature unit from settings, default to celsius
+  const temperatureUnit = settings?.temperatureUnit || "celsius";
 
 
   return (
@@ -58,7 +61,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
           <div className="flex-1 md:text-left">
             <div className="mb-2 text-center">
               <p className="text-6xl md:text-7xl font-bold text-foreground leading-none">
-                {temp}{tempUnit}
+                {formatTemperature(temp, temperatureUnit)}
               </p>
               <p className="text-lg text-muted-foreground mt-1">
                 {condition}
@@ -68,14 +71,14 @@ const WeatherCard = ({ weatherData, timezone }) => {
             <div className="flex items-center justify-center md:justify-start gap-4 mt-4">
               <div className="flex items-center gap-1 text-sm">
                 <ThermometerSun className="h-4 w-4 text-orange-500" />
-                <span className="text-foreground font-medium">{tempMax}{tempUnit}</span>
+                <span className="text-foreground font-medium">{formatTemperature(tempMax, temperatureUnit)}</span>
               </div>
               <div className="flex items-center gap-1 text-sm">
                 <Snowflake className="h-4 w-4 text-blue-500" />
-                <span className="text-foreground font-medium">{tempMin}{tempUnit}</span>
+                <span className="text-foreground font-medium">{formatTemperature(tempMin, temperatureUnit)}</span>
               </div>
               <div className="text-sm text-muted-foreground">
-                Feels like {feelsLike}{tempUnit}
+                Feels like {formatTemperature(feelsLike, temperatureUnit)}
               </div>
             </div>
           </div>
