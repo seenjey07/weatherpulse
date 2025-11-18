@@ -8,7 +8,7 @@ import { useGeolocation } from "../hooks/useGeolocation";
 import { AlertCircle, Sunrise, Sunset } from "lucide-react";
 import { formatTime } from "../utils/weatherIcons";
 
-const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
+const CurrentWeather = forwardRef(({ onWeatherData, settings }, ref) => {
   const { location } = useGeolocation();
   const { weatherData, isLoading, error, fetchWeather } = useWeather();
 
@@ -54,7 +54,11 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
         {weatherData && !error && (
           <>
             <div className="mt-4 animate-slide-in">
-              <WeatherCard weatherData={weatherData} timezone={timezone} />
+              <WeatherCard 
+                weatherData={weatherData} 
+                timezone={timezone} 
+                settings={settings}
+              />
             </div>
 
             {/* Weather Metrics Grid */}
@@ -64,7 +68,11 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
                   <CardTitle className="text-lg text-primary mb-4">
                     Weather Details
                   </CardTitle>
-                  <WeatherMetrics weatherData={weatherData} timezone={timezone} />
+                  <WeatherMetrics 
+                    weatherData={weatherData} 
+                    timezone={timezone} 
+                    settings={settings}
+                  />
                 </CardContent>
               </Card>
             </div>
