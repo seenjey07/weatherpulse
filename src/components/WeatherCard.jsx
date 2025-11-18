@@ -17,17 +17,17 @@ const WeatherCard = ({ weatherData, timezone }) => {
   const condition = capitalizeFirstLetters(weatherData.weather?.[0]?.description || "");
 
   return (
-    <Card className="bg-gradient-to-br from-blue-50/95 via-indigo-50/95 to-purple-50/95 dark:from-blue-950/95 dark:via-indigo-950/95 dark:to-purple-950/95 backdrop-blur-md border-2 border-primary/20 shadow-xl overflow-hidden">
+    <Card className="glass-card overflow-hidden">
       <CardContent className="p-6">
         {/* Location and Date */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-primary" />
-            <div>
-              <p className="font-semibold text-foreground">
+        <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center justify-center gap-2">
+            <div className="text-center flex flex-col items-center justify-center">
+              <p className="font-semibold text-foreground text-4xl flex items-center justify-center">
+              <MapPin className="h-5 w-6 text-primary" />
                 {weatherData.name}, {weatherData.sys?.country}
               </p>
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {formatDateTime(weatherData.dt, timezone)}
               </p>
@@ -36,7 +36,7 @@ const WeatherCard = ({ weatherData, timezone }) => {
         </div>
 
         {/* Main Weather Display */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
+        <div className="flex flex-col items-center justify-center gap-6 mb-6">
           {/* Weather Icon */}
           <div className="flex-shrink-0">
             {weatherIcon && (
@@ -55,9 +55,9 @@ const WeatherCard = ({ weatherData, timezone }) => {
           </div>
 
           {/* Temperature and Condition */}
-          <div className="flex-1 text-center md:text-left">
-            <div className="mb-2">
-              <p className="text-6xl md:text-7xl font-bold text-primary leading-none">
+          <div className="flex-1 md:text-left">
+            <div className="mb-2 text-center">
+              <p className="text-6xl md:text-7xl font-bold text-foreground leading-none">
                 {temp}°
               </p>
               <p className="text-lg text-muted-foreground mt-1">
