@@ -78,22 +78,22 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
                   </CardTitle>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
-                      <div className="p-2 rounded-lg bg-transparent">
+                      <div className="p-2 rounded-lg bg-yellow-400/10">
                         <span className="text-2xl text-yellow-400"><Sunrise /></span>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunrise</p>
+                        <p className="text-xs text-muted-foreground mb-1">Sunrise</p>
                         <p className="text-sm font-semibold text-foreground">
                           {formatTime(weatherData.sys?.sunrise, timezone)}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-lg">
-                      <div className="p-2 rounded-lg bg-transparent">
-                        <span className="text-2xl text-orange-500"><Sunset /></span>
+                      <div className="p-2 rounded-lg bg-orange-500/10">
+                        <span className="text-2xl text-orange-500 "><Sunset /></span>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunset</p>
+                        <p className="text-xs text-muted-foreground mb-1">Sunset</p>
                         <p className="text-sm font-semibold text-foreground">
                           {formatTime(weatherData.sys?.sunset, timezone)}
                         </p>
