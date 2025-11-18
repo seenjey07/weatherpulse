@@ -21,25 +21,25 @@ const Header = ({ onSearch, onSettingsChange }) => {
 
   return (
     <>
-      <header className="px-4 sm:px-8 py-4 flex flex-col items-center justify-between gap-4 md:flex-row bg-background/10 backdrop-blur-sm border-b border-border/20">
-        <div className="flex items-center gap-3">
+      <header className="glass-card sticky top-0 z-50 px-4 sm:px-8 py-4 flex flex-col items-center justify-between gap-4 md:flex-row bg-background/10 border-b border-border/20 rounded-b-3xl">
+        <div className="flex items-center gap-1">
           <img
             src={logo}
             alt="WeatherPulse Logo"
-            className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain transition-transform hover:scale-105"
+            className="w-14 h-14 object-contain transition-transform hover:scale-105"
             loading="eager"
           />
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary drop-shadow-lg">
+          <h1 className="text-xl sm:text-md font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
             WeatherPulse
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 w-full md:w-auto justify-center md:justify-end">
-          <div className="flex-1 md:flex-none">
+        <div className="flex items-center gap-1 w-full md:w-auto justify-center md:justify-end">
+          <div className="flex-1 md:flex-none ml-3">
             <SearchBar onSearch={onSearch} />
           </div>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={() => setIsSettingsOpen(true)}
             className="flex-shrink-0 h-10 w-10 self-center"
