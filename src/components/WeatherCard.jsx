@@ -16,10 +16,10 @@ const WeatherCard = ({ weatherData, timezone }) => {
   const tempMax = Math.round(weatherData.main?.temp_max || 0);
   const condition = capitalizeFirstLetters(weatherData.weather?.[0]?.description || "");
 
+
   return (
-    <Card className="glass-card overflow-hidden">
+    <Card className="bg-gradient-to-br from-cyan-50/90 via-teal-50/90 to-emerald-50/90 backdrop-blur-sm border-2 border-primary/20 shadow-lg overflow-hidden">
       <CardContent className="p-6">
-        {/* Location and Date */}
         <div className="flex items-center justify-center mb-4">
           <div className="flex items-center justify-center gap-2">
             <div className="text-center flex flex-col items-center justify-center">
@@ -37,7 +37,6 @@ const WeatherCard = ({ weatherData, timezone }) => {
 
         {/* Main Weather Display */}
         <div className="flex flex-col items-center justify-center gap-6 mb-6">
-          {/* Weather Icon */}
           <div className="flex-shrink-0">
             {weatherIcon && (
               <video
