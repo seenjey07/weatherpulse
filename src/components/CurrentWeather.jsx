@@ -6,6 +6,7 @@ import WeatherMetrics from "./WeatherMetrics";
 import { useWeather } from "../hooks/useWeather";
 import { useGeolocation } from "../hooks/useGeolocation";
 import { AlertCircle, Sunrise, Sunset } from "lucide-react";
+import { formatTime } from "../utils/weatherIcons";
 
 const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
   const { location } = useGeolocation();
@@ -83,12 +84,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
                       <div>
                         <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunrise</p>
                         <p className="text-sm font-semibold text-foreground">
-                          {new Date((weatherData.sys?.sunrise + timezone) * 1000)
-                            .toLocaleTimeString("en-US", {
-                              hour: "numeric",
-                              minute: "2-digit",
-                              hour12: true,
-                            })}
+                          {formatTime(weatherData.sys?.sunrise, timezone)}
                         </p>
                       </div>
                     </div>
@@ -99,12 +95,7 @@ const CurrentWeather = forwardRef(({ onWeatherData }, ref) => {
                       <div>
                         <p className="text-xs text-muted-foreground mb-1 bg-transparent">Sunset</p>
                         <p className="text-sm font-semibold text-foreground">
-                          {new Date((weatherData.sys?.sunset + timezone) * 1000)
-                            .toLocaleTimeString("en-US", {
-                              hour: "numeric",
-                              minute: "2-digit",
-                              hour12: true,
-                            })}
+                          {formatTime(weatherData.sys?.sunset, timezone)}
                         </p>
                       </div>
                     </div>
