@@ -32,10 +32,15 @@ export const FavoritesProvider = ({ children }) => {
   }, [favorites]);
 
   const addFavorite = (location) => {
+    if (!location || typeof location.lat !== 'number' || typeof location.lon !== 'number') {
+      console.error('Invalid location data for favorite:', location);
+      return;
+    }
+
     const favorite = {
-      name: location.name,
-      country: location.country,
-      state: location.state,
+      name: location.name || 'Unknown',
+      country: location.country || '',
+      state: location.state || null,
       lat: location.lat,
       lon: location.lon,
       id: `${location.lat}-${location.lon}`,
@@ -50,10 +55,18 @@ export const FavoritesProvider = ({ children }) => {
   };
 
   const removeFavorite = (id) => {
+    if (!id || typeof id !== 'string') {
+      console.error('Invalid favorite id for removal:', id);
+      return;
+    }
     setFavorites((prev) => prev.filter((fav) => fav.id !== id));
   };
 
   const isFavorite = (lat, lon) => {
+    // Validate inputs
+    if (typeof lat !== 'number' || typeof lon !== 'number') {
+      return false;
+    }
     const id = `${lat}-${lon}`;
     return favorites.some((fav) => fav.id === id);
   };
